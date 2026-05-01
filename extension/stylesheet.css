@@ -1,0 +1,30 @@
+.orate-pill {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+
+.orate-pill.orate-active {
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 17px;
+}
+
+.orate-pill.orate-error {
+    background-color: rgba(217, 38, 38, 0.9);
+    border-radius: 17px;
+}
+
+.orate-bar {
+    background-color: white;
+    border-radius: 1px;
+}
+
+.orate-dot {
+    background-color: white;
+    border-radius: 2px;
+}
+
+.orate-error-label {
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+}

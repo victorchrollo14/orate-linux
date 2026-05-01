@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.orate.App.Service
+Exec=@BIN_PATH@ --service

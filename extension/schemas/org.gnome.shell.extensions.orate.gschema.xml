@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.orate" path="/org/gnome/shell/extensions/orate/">
+    <key name="toggle-recording" type="as">
+      <default><![CDATA[['<Control>F8']]]></default>
+      <summary>Toggle recording</summary>
+      <description>Keyboard shortcut that starts or stops the orate recording.</description>
+    </key>
+  </schema>
+</schemalist>

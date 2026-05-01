@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.orate.app" path="/org/orate/app/">
+    <key name="ai-provider" type="s">
+      <default>'orateCloud'</default>
+      <summary>Selected AI provider</summary>
+    </key>
+    <key name="custom-instructions" type="s">
+      <default>''</default>
+      <summary>Custom system prompt additions</summary>
+    </key>
+    <key name="vocabulary-words" type="as">
+      <default>[]</default>
+      <summary>Custom vocabulary words for transcription hints</summary>
+    </key>
+    <key name="vertex-project-id" type="s">
+      <default>''</default>
+      <summary>Vertex AI project ID</summary>
+    </key>
+    <key name="vertex-region" type="s">
+      <default>'us-central1'</default>
+      <summary>Vertex AI region</summary>
+    </key>
+  </schema>
+</schemalist>

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Orate
+Comment=Push-to-talk voice transcription
+Exec=orate
+Icon=com.orate.App
+Type=Application
+Categories=Utility;AudioVideo;
+Terminal=false
+StartupNotify=true

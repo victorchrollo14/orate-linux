@@ -1,0 +1,8 @@
+{
+    "uuid": "orate@orate.app",
+    "name": "Orate",
+    "description": "Toggle overlay for the Orate transcription daemon. Press Ctrl+F8 to start, again to stop; result lands on the clipboard.",
+    "shell-version": ["46", "47", "48"],
+    "settings-schema": "org.gnome.shell.extensions.orate",
+    "url": "https://github.com/lavisht22/orate"
+}
