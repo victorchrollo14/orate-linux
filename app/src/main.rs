@@ -1,5 +1,6 @@
 mod clipboard;
 mod dbus_service;
+mod history;
 mod recorder;
 mod secret;
 mod settings_window;

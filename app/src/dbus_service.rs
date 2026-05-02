@@ -6,6 +6,7 @@ use tokio::sync::{mpsc, Mutex};
 use zbus::{connection, interface, object_server::SignalEmitter};
 
 use crate::clipboard;
+use crate::history;
 use crate::recorder::Recorder;
 use crate::secret;
 use crate::settings_window::ORATE_CLOUD_KEY;
@@ -190,6 +191,15 @@ async fn transcribe_and_copy(audio: Vec<u8>, emitter: &SignalEmitter<'static>) {
                 eprintln!("[orate] copied to clipboard ({} chars)", result.transcript.len());
                 let _ = Service::paste_requested(emitter).await;
             }
+
+            let transcript = result.transcript.clone();
+            let latency = result.latency_ms as u64;
+            let _ = tokio::task::spawn_blocking(move || {
+                if let Err(e) = history::save(&transcript, latency) {
+                    eprintln!("[orate] history save failed: {e}");
+                }
+            })
+            .await;
         }
         Err(e) => {
             eprintln!("[orate] transcription failed: {e}");
