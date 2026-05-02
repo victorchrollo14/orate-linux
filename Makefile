@@ -4,6 +4,7 @@ DATA_DIR := $(PREFIX)/share
 SCHEMA_DIR := $(DATA_DIR)/glib-2.0/schemas
 DESKTOP_DIR := $(DATA_DIR)/applications
 DBUS_SERVICE_DIR := $(DATA_DIR)/dbus-1/services
+ICON_DIR := $(DATA_DIR)/icons/hicolor
 EXT_UUID := orate@orate.app
 EXT_DIR := $(DATA_DIR)/gnome-shell/extensions/$(EXT_UUID)
 
@@ -25,6 +26,9 @@ install-app: build
 	install -Dm755 app/target/release/orate $(BIN_DIR)/orate
 	install -Dm644 app/data/org.orate.app.gschema.xml $(SCHEMA_DIR)/org.orate.app.gschema.xml
 	install -Dm644 app/data/com.orate.App.desktop $(DESKTOP_DIR)/com.orate.App.desktop
+	install -Dm644 app/data/icon.svg $(ICON_DIR)/scalable/apps/com.orate.App.svg
+	install -Dm644 app/data/icon.png $(ICON_DIR)/256x256/apps/com.orate.App.png
+	-gtk-update-icon-cache -f -t $(ICON_DIR)
 	mkdir -p $(DBUS_SERVICE_DIR)
 	sed 's|@BIN_PATH@|$(BIN_DIR)/orate|g' app/data/com.orate.App.Service.service.in \
 		> $(DBUS_SERVICE_DIR)/com.orate.App.Service.service
@@ -50,6 +54,9 @@ uninstall:
 	rm -f $(SCHEMA_DIR)/org.orate.app.gschema.xml
 	rm -f $(DESKTOP_DIR)/com.orate.App.desktop
 	rm -f $(DBUS_SERVICE_DIR)/com.orate.App.service
+	rm -f $(ICON_DIR)/scalable/apps/com.orate.App.svg
+	rm -f $(ICON_DIR)/256x256/apps/com.orate.App.png
+	-gtk-update-icon-cache -f -t $(ICON_DIR)
 	-glib-compile-schemas $(SCHEMA_DIR)
 	rm -rf $(EXT_DIR)
 
