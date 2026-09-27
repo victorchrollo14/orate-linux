@@ -53,15 +53,39 @@ uninstall:
 	rm -f $(BIN_DIR)/orate
 	rm -f $(SCHEMA_DIR)/org.orate.app.gschema.xml
 	rm -f $(DESKTOP_DIR)/com.orate.App.desktop
-	rm -f $(DBUS_SERVICE_DIR)/com.orate.App.service
+	rm -f $(DBUS_SERVICE_DIR)/com.orate.App.Service.service
 	rm -f $(ICON_DIR)/scalable/apps/com.orate.App.svg
 	rm -f $(ICON_DIR)/256x256/apps/com.orate.App.png
 	-gtk-update-icon-cache -f -t $(ICON_DIR)
 	-glib-compile-schemas $(SCHEMA_DIR)
 	rm -rf $(EXT_DIR)
 
-dev:
-	cd app && cargo run
+# Compiles the GSettings schema into a scratch dir and points GSettings at it,
+# so preferences persist when running straight from the source tree.
+DEV_SCHEMA_DIR := $(CURDIR)/app/target/schemas
 
+dev:
+	mkdir -p $(DEV_SCHEMA_DIR)
+	cp app/data/org.orate.app.gschema.xml $(DEV_SCHEMA_DIR)/
+	glib-compile-schemas $(DEV_SCHEMA_DIR)
+	cd app && GSETTINGS_SCHEMA_DIR=$(DEV_SCHEMA_DIR) cargo run
+
+# App logs (recorder, D-Bus service, transcription):
+#   $XDG_STATE_HOME/orate/orate.log   (defaults to ~/.local/state/orate/orate.log)
+# Extension logs (waveform pill, keybinding, paste):
+#   journalctl --user -f /usr/bin/gnome-shell
+# A debug copy of the most recent recording is kept at:
+#   ~/.local/state/orate/last_recording.flac
 logs:
-	journalctl --user -f /usr/bin/gnome-shell
+	@echo "==> tailing app log + gnome-shell extension log (Ctrl+C to stop)"
+	@mkdir -p $${XDG_STATE_HOME:-$$HOME/.local/state}/orate
+	@touch $${XDG_STATE_HOME:-$$HOME/.local/state}/orate/orate.log
+	tail -F $${XDG_STATE_HOME:-$$HOME/.local/state}/orate/orate.log & \
+		journalctl --user -f /usr/bin/gnome-shell | grep --line-buffered -i orate; \
+		kill %1 2>/dev/null
+
+applog:
+	tail -F $${XDG_STATE_HOME:-$$HOME/.local/state}/orate/orate.log
+
+extlog:
+	journalctl --user -f /usr/bin/gnome-shell | grep --line-buffered -i orate

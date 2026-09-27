@@ -1,25 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
   <schema id="org.orate.app" path="/org/orate/app/">
-    <key name="ai-provider" type="s">
-      <default>'orateCloud'</default>
-      <summary>Selected AI provider</summary>
-    </key>
     <key name="custom-instructions" type="s">
       <default>''</default>
       <summary>Custom system prompt additions</summary>
+      <description>Free-form instructions appended to every transcription request.</description>
     </key>
     <key name="vocabulary-words" type="as">
       <default>[]</default>
       <summary>Custom vocabulary words for transcription hints</summary>
+      <description>Names, brands and technical terms the model should spell exactly as written.</description>
+    </key>
+    <key name="sound-feedback" type="b">
+      <default>true</default>
+      <summary>Play sound cues</summary>
+      <description>Play a sound when recording starts, when a transcription lands, and on errors.</description>
+    </key>
+    <key name="ai-provider" type="s">
+      <choices>
+        <choice value="orateCloud"/>
+        <choice value="googleAI"/>
+        <choice value="vertexAI"/>
+      </choices>
+      <default>'orateCloud'</default>
+      <summary>Transcription provider</summary>
+      <description>Where audio is sent for transcription: Orate Cloud, Google AI Studio (Gemini API) or Vertex AI.</description>
     </key>
     <key name="vertex-project-id" type="s">
       <default>''</default>
       <summary>Vertex AI project ID</summary>
+      <description>Google Cloud project used when the provider is Vertex AI.</description>
     </key>
     <key name="vertex-region" type="s">
       <default>'us-central1'</default>
       <summary>Vertex AI region</summary>
+      <description>Vertex AI location, e.g. us-central1 or global.</description>
+    </key>
+    <key name="save-audio" type="b">
+      <default>true</default>
+      <summary>Keep recordings</summary>
+      <description>Store the captured audio alongside each history entry so it can be replayed.</description>
     </key>
   </schema>
 </schemalist>

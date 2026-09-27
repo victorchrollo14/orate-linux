@@ -2,6 +2,7 @@ use std::fs;
 use std::path::PathBuf;
 
 use chrono::{DateTime, Duration, Utc};
+use log::{debug, warn};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -10,6 +11,19 @@ pub struct HistoryEntry {
     pub timestamp: DateTime<Utc>,
     pub transcript: String,
     pub latency_ms: u64,
+    // Optional so older JSON files still deserialize cleanly.
+    #[serde(default)]
+    pub words_remaining: Option<u64>,
+}
+
+impl HistoryEntry {
+    pub fn audio_path(&self) -> PathBuf {
+        history_dir().join(format!("{}.flac", self.id))
+    }
+
+    pub fn has_audio(&self) -> bool {
+        self.audio_path().exists()
+    }
 }
 
 pub fn history_dir() -> PathBuf {
@@ -22,7 +36,12 @@ pub fn history_dir() -> PathBuf {
     base.join("orate/history")
 }
 
-pub fn save(transcript: &str, latency_ms: u64) -> Result<HistoryEntry, String> {
+pub fn save(
+    transcript: &str,
+    latency_ms: u64,
+    audio: Option<&[u8]>,
+    words_remaining: Option<u64>,
+) -> Result<HistoryEntry, String> {
     let dir = history_dir();
     fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
 
@@ -33,11 +52,21 @@ pub fn save(transcript: &str, latency_ms: u64) -> Result<HistoryEntry, String> {
         now.timestamp_subsec_nanos()
     );
 
+    if let Some(bytes) = audio {
+        let audio_path = dir.join(format!("{id}.flac"));
+        if let Err(e) = fs::write(&audio_path, bytes) {
+            warn!("history: failed to save audio for {id}: {e}");
+        } else {
+            debug!("history: wrote {} bytes to {}", bytes.len(), audio_path.display());
+        }
+    }
+
     let entry = HistoryEntry {
         id: id.clone(),
         timestamp: now,
         transcript: transcript.to_string(),
         latency_ms,
+        words_remaining,
     };
 
     let path = dir.join(format!("{id}.json"));
@@ -85,8 +114,15 @@ pub fn delete_older_than(days: Option<i64>) -> usize {
                 entry.timestamp < cutoff_ts
             }
         };
-        if should_delete && fs::remove_file(&path).is_ok() {
-            count += 1;
+        if should_delete {
+            // remove the sibling FLAC too if present
+            let flac = path.with_extension("flac");
+            if flac.exists() {
+                let _ = fs::remove_file(&flac);
+            }
+            if fs::remove_file(&path).is_ok() {
+                count += 1;
+            }
         }
     }
     count

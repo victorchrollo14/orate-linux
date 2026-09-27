@@ -278,14 +278,24 @@ export default class OrateExtension extends Extension {
                     console.error(`orate: failed to create proxy: ${error.message}`);
                     return;
                 }
+                console.log('orate: D-Bus proxy ready; subscribing to signals');
                 this._proxy = proxy;
+                this._levelCount = 0;
                 this._stateChangedSig = proxy.connectSignal(
                     'StateChanged',
-                    (_p, _s, [state]) => this._onStateChanged(state)
+                    (_p, _s, [state]) => {
+                        console.log(`orate: StateChanged -> ${state}`);
+                        this._onStateChanged(state);
+                    }
                 );
                 this._levelUpdateSig = proxy.connectSignal(
                     'LevelUpdate',
-                    (_p, _s, [level]) => this._pill.updateLevel(level)
+                    (_p, _s, [level]) => {
+                        this._levelCount++;
+                        if (this._levelCount === 1)
+                            console.log(`orate: first LevelUpdate received (level=${level.toFixed(3)})`);
+                        this._pill.updateLevel(level);
+                    }
                 );
                 this._errorSig = proxy.connectSignal(
                     'ErrorOccurred',

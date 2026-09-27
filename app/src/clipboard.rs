@@ -1,7 +1,10 @@
 use std::io::Write;
 use std::process::{Command, Stdio};
 
+use log::debug;
+
 pub fn set(text: &str) -> Result<(), String> {
+    debug!("wl-copy: writing {} bytes to clipboard", text.len());
     let mut child = Command::new("wl-copy")
         .stdin(Stdio::piped())
         .stdout(Stdio::null())
@@ -20,5 +23,6 @@ pub fn set(text: &str) -> Result<(), String> {
     if !status.success() {
         return Err(format!("wl-copy exited with {status}"));
     }
+    debug!("wl-copy: success");
     Ok(())
 }

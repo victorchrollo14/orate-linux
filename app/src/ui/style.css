@@ -1,0 +1,195 @@
+/* Orate — loaded at APPLICATION priority so the look is identical regardless
+   of which GTK theme is active. Every colour is derived from the theme's own
+   foreground/selection colours, so light and dark both work. */
+
+/* MARK: - Sidebar */
+
+.orate-sidebar {
+  background-color: alpha(@theme_fg_color, 0.04);
+}
+
+.orate-sidebar list {
+  background-color: transparent;
+}
+
+.orate-sidebar row {
+  margin: 2px 8px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  min-height: 0;
+}
+
+.orate-sidebar row:hover {
+  background-color: alpha(@theme_fg_color, 0.06);
+}
+
+.orate-sidebar row:selected {
+  background-color: @theme_selected_bg_color;
+  color: @theme_selected_fg_color;
+}
+
+.orate-sidebar row image {
+  opacity: 0.8;
+}
+
+.orate-brand {
+  font-weight: bold;
+  opacity: 0.5;
+  font-size: 0.8em;
+  margin: 16px 20px 6px 20px;
+}
+
+/* MARK: - Typography */
+
+.orate-title {
+  font-size: 1.9em;
+  font-weight: 800;
+}
+
+.orate-subtitle {
+  font-size: 1.15em;
+  opacity: 0.62;
+}
+
+.orate-section {
+  font-weight: bold;
+}
+
+.orate-body-dim {
+  opacity: 0.62;
+}
+
+.orate-caption {
+  font-size: 0.85em;
+  opacity: 0.55;
+}
+
+.orate-success {
+  color: #2ec27e;
+  font-weight: bold;
+}
+
+.orate-error {
+  color: #e01b24;
+}
+
+.orate-empty-icon {
+  opacity: 0.35;
+}
+
+/* MARK: - Surfaces */
+
+.orate-card {
+  background-color: alpha(@theme_fg_color, 0.05);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.orate-inset {
+  background-color: alpha(@theme_fg_color, 0.04);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+/* Text entries and the instructions editor get the same flat filled look as
+   the macOS `.quaternary` backed fields. */
+.orate-field {
+  background-color: alpha(@theme_fg_color, 0.05);
+  background-image: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.orate-field:focus-within,
+.orate-field:focus {
+  background-color: alpha(@theme_fg_color, 0.08);
+}
+
+/* The scrolled window carries the fill; viewport and text view underneath it
+   must stay transparent or they paint the theme's base colour over it. */
+.orate-editor > viewport,
+.orate-editor textview,
+.orate-editor textview text {
+  background-color: transparent;
+}
+
+.orate-editor {
+  background-color: alpha(@theme_fg_color, 0.05);
+  border-radius: 10px;
+}
+
+/* MARK: - Chips (vocabulary) */
+
+.orate-chip {
+  background-color: alpha(@theme_fg_color, 0.08);
+  border-radius: 100px;
+  padding: 3px 4px 3px 14px;
+}
+
+.orate-chip button {
+  min-width: 22px;
+  min-height: 22px;
+  padding: 0;
+  border-radius: 100px;
+  background: none;
+  box-shadow: none;
+  border: none;
+  opacity: 0.55;
+}
+
+.orate-chip button:hover {
+  opacity: 1;
+  background-color: alpha(@theme_fg_color, 0.12);
+}
+
+/* MARK: - Clickable example rows (instructions) */
+
+.orate-example {
+  background-color: alpha(@theme_fg_color, 0.04);
+  border-radius: 8px;
+  padding: 10px;
+  transition: background-color 120ms ease;
+}
+
+.orate-example:hover {
+  background-color: alpha(@theme_fg_color, 0.09);
+}
+
+/* MARK: - Shortcut recorder */
+
+.orate-keycap {
+  background-color: alpha(@theme_fg_color, 0.06);
+  background-image: none;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: monospace;
+}
+
+.orate-keycap:hover {
+  background-color: alpha(@theme_fg_color, 0.1);
+}
+
+.orate-keycap.recording {
+  border-color: @theme_selected_bg_color;
+  background-color: alpha(@theme_selected_bg_color, 0.14);
+}
+
+/* MARK: - Words-remaining badge */
+
+.orate-badge {
+  background-color: alpha(@theme_selected_bg_color, 0.16);
+  color: @theme_selected_bg_color;
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+/* MARK: - Monospace secrets */
+
+.orate-mono {
+  font-family: monospace;
+}
